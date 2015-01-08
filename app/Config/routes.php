@@ -30,6 +30,16 @@
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
+	/* Profile page */
+	Router::connect('/me', array('controller' => 'users', 'action' => 'profile'));
+	/* Edit profile page */
+	Router::connect('/me/edit', array('controller' => 'users', 'action' => 'edit'));
+
+	Router::connect('/sign-up', array('controller' => 'users', 'action' => 'add'));
+
+	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+
+
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
