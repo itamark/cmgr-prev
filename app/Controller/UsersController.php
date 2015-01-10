@@ -148,7 +148,7 @@ class UsersController extends AppController {
 
 		$this->Session->setFlash(__('User was not deleted'), 'flash_fail');
 
-		$this->redirect('/home');
+		$this->redirect('/');
 	}
 
 
