@@ -34,9 +34,34 @@ $cakeDescription = __d('cake_dev', 'CMGR');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
+	      <link type="text/css" rel="stylesheet" href="/libs/materialize/css/materialize.min.css"  media="screen,projection"/>
+
 </head>
 <body>
-	<div id="container">
+
+	 <nav>
+      <div class="nav-wrapper container">
+        <a href="/" class="brand-logo">CMGR</a>
+        <ul id="nav-mobile" class="right side-nav">
+          <li><a href="sass.html">Sass</a></li>
+          <li><a href="components.html">Components</a></li>
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
+        </ul>
+
+        <!-- Include this line below -->
+        <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
+        	<!-- Dropdown Structure -->
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="#!">View Profile</a></li>
+  <li><a href="#!">two</a></li>
+ <!--  <li class="divider"></li> -->
+  <li><a href="#!">Logout</a></li>
+</ul>
+        <!-- End -->
+
+      </div>
+    </nav>
+	<div id="container" class="container">
 		<div id="header">
 			<h1><?php echo $this->Html->link($cakeDescription, '/'); ?></h1>
 		</div>
@@ -53,5 +78,16 @@ $cakeDescription = __d('cake_dev', 'CMGR');
 	<?php 
 	// echo $this->element('sql_dump'); 
 	?>
+		      <script type="text/javascript" src="/libs/jquery/jquery.js"></script>
+
+	      <script type="text/javascript" src="/libs/materialize/js/materialize.min.js"></script>
+	      <script type="text/javascript">
+	      $(function(){
+$('select').material_select();
+$(".button-collapse").sideNav();
+$(".dropdown-button").dropdown({hover: false});
+});
+	      </script>
+
 </body>
 </html>
