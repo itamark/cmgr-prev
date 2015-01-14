@@ -7,13 +7,18 @@ $(function() {
 
     $('html').removeClass('no-js');
 
-    var $page = $('body');
+  var $page = $('body');
    
-   if($page.find('form')){
+   if($page.find('form').length > 0){
     Component.Forms.init($page, {});
    }
 
-   if($page.find('a.comments')){
+   if($page.find('.alert').length > 0){
+    $page.find('.alert').hide();
+    toast($page.find('.alert').text(), 4000);
+   }
+
+   if($page.find('a.comments').length > 0){
     Component.Comments.init($page, {});
    }
 
