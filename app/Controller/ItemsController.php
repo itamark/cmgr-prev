@@ -21,8 +21,12 @@ class ItemsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Item->recursive = 0;
+		$this->Item->recursive = 1;
 		$this->set('items', $this->Paginator->paginate());
+		$users = $this->User->find('list');
+		 $topics = $this->Item->Topic->find('list');
+		$this->set(compact('users', 'topics'));
+
 	}
 
 /**
@@ -50,7 +54,8 @@ class ItemsController extends AppController {
 			$this->Item->create();
 			if ($this->Item->save($this->request->data)) {
 				$this->Session->setFlash(__('The item has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+header('Content-type: application/json');
+				die(json_encode($this->request->data));
 			} else {
 				$this->Session->setFlash(__('The item could not be saved. Please, try again.'));
 			}
