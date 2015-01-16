@@ -1,8 +1,8 @@
 <div class="row">
-    <div class="col-lg-4 col-lg-offset-4">
+    <div class="col l6 offset-l3">
     <?php echo $this->Form->create('User');?>
     <div class="center">
-      <h2><?php echo $label ?></h2>
+      <h3><?php echo $label ?></h3>
     </div>
 
     <hr>

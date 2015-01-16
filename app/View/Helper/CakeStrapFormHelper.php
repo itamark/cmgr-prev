@@ -27,10 +27,10 @@ class CakeStrapFormHelper extends FormHelper {
 			$options['div'] = join(' ',$options['div']);
 		}
 
-		if (!isset($options['placeholder'])) {
-			$label = (isset($options['label'])) ? $options['label'] : Inflector::humanize($fieldName);
-			$options['placeholder'] = $label;
-		}
+		// if (!isset($options['placeholder'])) {
+		// 	$label = (isset($options['label'])) ? $options['label'] : Inflector::humanize($fieldName);
+		// 	$options['placeholder'] = $label;
+		// }
 
 		if (isset($options['helpText'])) {
 			$options['after'] ='<span class="help-block">' . $options['helpText'] . '</span>';

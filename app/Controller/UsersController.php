@@ -42,6 +42,8 @@ class UsersController extends AppController {
 				$this->Session->setFlash(__('Invalid username or password, try again'), 'flash_fail');
 			}
 		}
+				$this->set('label', 'Login');
+
 	}
 
 	public function logout() {
