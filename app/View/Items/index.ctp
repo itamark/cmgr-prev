@@ -1,33 +1,5 @@
 <div class="items index">
-<!-- 	<h2><?php echo __('Posts'); ?></h2>
- --><!-- 	<?php print_r($authUser); ?>
- -->	<div class="row">
-			<div class="col l8">
-<?php echo $this->Form->create(null, array('url'=>'/items/add')); ?>
-<!-- 		<legend><?php echo __('Add Item'); ?></legend>
- -->		
-				<?php
-		
-		echo $this->Form->input('user_id', array('options' => $users, 'default' => $authUser['id'], 'type' => 'hidden'));
-		echo $this->Form->input('title', array('type' => 'hidden'));
-		
-		echo $this->Form->input('description', array('label' => 'Ask and share...'));
-		echo $this->Form->input('url', array('type' => 'hidden'));
-		echo $this->Form->input('topic_id', array('options' => $topics));
-	?>
-			
-	
-<?php echo $this->Form->end(__('Post')); ?>
-<?php foreach ($items as $item): ?>
-<div class="card">
-            <div class="card-content">
-              <span class="card-title grey-text"><?php echo h($item['Item']['description']); ?></span>
-
-</div>
-		</div>
-<?php endforeach; ?>
-</div>
-		</div>
+	<h2><?php echo __('Items'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<thead>
 	<tr>

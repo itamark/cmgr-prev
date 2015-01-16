@@ -102,9 +102,6 @@ class AppController extends Controller
 			  $this->redirect(array('controller' => 'pages', 'action' => 'maintenance'));
 		  }
 	  }
-    if($this->Auth->user()){
-    $this->set('authUser', AuthComponent::user());
-}
   }
 
   public function beforeRender() {
