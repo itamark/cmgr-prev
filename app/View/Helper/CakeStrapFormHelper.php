@@ -21,7 +21,7 @@ class CakeStrapFormHelper extends FormHelper {
 	
 	public function input($fieldName, $options = array())
 	{	
-		$optionsDefault = array('class'=>'form-control','div'=>'input-field');
+		$optionsDefault = array('class'=>'form-control','div'=>'form-group');
 		$options = array_merge_recursive($optionsDefault, $options);
 		if (sizeof($options['div']) > 1) {
 			$options['div'] = join(' ',$options['div']);
@@ -46,7 +46,7 @@ class CakeStrapFormHelper extends FormHelper {
 
 	public function end($string ='Salvar',$options = array()) {
 		
-		$optionsDefault = array('class'=>'btn btn-primary','div'=>'input-field');
+		$optionsDefault = array('class'=>'btn btn-primary','div'=>'form-group');
 		$options = array_merge_recursive($optionsDefault, $options);
 
 		$retorno  = parent::submit($string,$options);
