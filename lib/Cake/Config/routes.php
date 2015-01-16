@@ -1,5 +1,9 @@
 <?php
 /**
+ * Default routes that CakePHP provides as catch all routes.
+ *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -22,6 +26,7 @@
  * created when your application has one or more plugins.
  *
  * - `/:prefix/:plugin` a plugin shortcut route.
+ * - `/:prefix/:plugin/:action/*` a plugin shortcut route.
  * - `/:prefix/:plugin/:controller`
  * - `/:prefix/:plugin/:controller/:action/*`
  * - `/:prefix/:controller`
@@ -30,6 +35,7 @@
  * If plugins are found in your application the following routes are created:
  *
  * - `/:plugin` a plugin shortcut route.
+ * - `/:plugin/:action/*` a plugin shortcut route.
  * - `/:plugin/:controller`
  * - `/:plugin/:controller/:action/*`
  *
@@ -48,8 +54,8 @@ if ($plugins = CakePlugin::loaded()) {
 		$plugins[$key] = Inflector::underscore($value);
 	}
 	$pluginPattern = implode('|', $plugins);
-	$match = array('plugin' => $pluginPattern, 'defaultRoute' => true);
-	$shortParams = array('routeClass' => 'PluginShortRoute', 'plugin' => $pluginPattern, 'defaultRoute' => true);
+	$match = array('plugin' => $pluginPattern);
+	$shortParams = array('routeClass' => 'PluginShortRoute', 'plugin' => $pluginPattern);
 
 	foreach ($prefixes as $prefix) {
 		$params = array('prefix' => $prefix, $prefix => true);
@@ -66,11 +72,11 @@ if ($plugins = CakePlugin::loaded()) {
 foreach ($prefixes as $prefix) {
 	$params = array('prefix' => $prefix, $prefix => true);
 	$indexParams = $params + array('action' => 'index');
-	Router::connect("/{$prefix}/:controller", $indexParams, array('defaultRoute' => true));
-	Router::connect("/{$prefix}/:controller/:action/*", $params, array('defaultRoute' => true));
+	Router::connect("/{$prefix}/:controller", $indexParams);
+	Router::connect("/{$prefix}/:controller/:action/*", $params);
 }
-Router::connect('/:controller', array('action' => 'index'), array('defaultRoute' => true));
-Router::connect('/:controller/:action/*', array(), array('defaultRoute' => true));
+Router::connect('/:controller', array('action' => 'index'));
+Router::connect('/:controller/:action/*');
 
 $namedConfig = Router::namedConfig();
 if ($namedConfig['rules'] === false) {
@@ -79,4 +85,3 @@ if ($namedConfig['rules'] === false) {
 
 unset($namedConfig, $params, $indexParams, $prefix, $prefixes, $shortParams, $match,
 	$pluginPattern, $plugins, $key, $value);
-

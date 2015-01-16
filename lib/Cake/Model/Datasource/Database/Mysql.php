@@ -2,6 +2,8 @@
 /**
  * MySQL layer for DBO
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -45,14 +47,13 @@ class Mysql extends DboSource {
 		'login' => 'root',
 		'password' => '',
 		'database' => 'cake',
-		'port' => '3306',
-		'flags' => array()
+		'port' => '3306'
 	);
 
 /**
  * Reference to the PDO object connection
  *
- * @var PDO
+ * @var PDO $_connection
  */
 	protected $_connection = null;
 
@@ -73,7 +74,7 @@ class Mysql extends DboSource {
 /**
  * use alias for update and delete. Set to true if version >= 4.1
  *
- * @var bool
+ * @var boolean
  */
 	protected $_useAlias = true;
 
@@ -85,13 +86,7 @@ class Mysql extends DboSource {
 	public $fieldParameters = array(
 		'charset' => array('value' => 'CHARACTER SET', 'quote' => false, 'join' => ' ', 'column' => false, 'position' => 'beforeDefault'),
 		'collate' => array('value' => 'COLLATE', 'quote' => false, 'join' => ' ', 'column' => 'Collation', 'position' => 'beforeDefault'),
-		'comment' => array('value' => 'COMMENT', 'quote' => true, 'join' => ' ', 'column' => 'Comment', 'position' => 'afterDefault'),
-		'unsigned' => array(
-			'value' => 'UNSIGNED', 'quote' => false, 'join' => ' ', 'column' => false, 'position' => 'beforeDefault',
-			'noVal' => true,
-			'options' => array(true),
-			'types' => array('integer', 'float', 'decimal', 'biginteger')
-		)
+		'comment' => array('value' => 'COMMENT', 'quote' => true, 'join' => ' ', 'column' => 'Comment', 'position' => 'afterDefault')
 	);
 
 /**
@@ -102,8 +97,7 @@ class Mysql extends DboSource {
 	public $tableParameters = array(
 		'charset' => array('value' => 'DEFAULT CHARSET', 'quote' => false, 'join' => '=', 'column' => 'charset'),
 		'collate' => array('value' => 'COLLATE', 'quote' => false, 'join' => '=', 'column' => 'Collation'),
-		'engine' => array('value' => 'ENGINE', 'quote' => false, 'join' => '=', 'column' => 'Engine'),
-		'comment' => array('value' => 'COMMENT', 'quote' => true, 'join' => '=', 'column' => 'Comment'),
+		'engine' => array('value' => 'ENGINE', 'quote' => false, 'join' => '=', 'column' => 'Engine')
 	);
 
 /**
@@ -118,7 +112,6 @@ class Mysql extends DboSource {
 		'biginteger' => array('name' => 'bigint', 'limit' => '20'),
 		'integer' => array('name' => 'int', 'limit' => '11', 'formatter' => 'intval'),
 		'float' => array('name' => 'float', 'formatter' => 'floatval'),
-		'decimal' => array('name' => 'decimal', 'formatter' => 'floatval'),
 		'datetime' => array('name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
 		'timestamp' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
 		'time' => array('name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'),
@@ -137,23 +130,14 @@ class Mysql extends DboSource {
 /**
  * Connects to the database using options in the given configuration array.
  *
- * MySQL supports a few additional options that other drivers do not:
- *
- * - `unix_socket` Set to the path of the MySQL sock file. Can be used in place
- *   of host + port.
- * - `ssl_key` SSL key file for connecting via SSL. Must be combined with `ssl_cert`.
- * - `ssl_cert` The SSL certificate to use when connecting via SSL. Must be
- *   combined with `ssl_key`.
- * - `ssl_ca` The certificate authority for SSL connections.
- *
- * @return bool True if the database could be connected, else false
+ * @return boolean True if the database could be connected, else false
  * @throws MissingConnectionException
  */
 	public function connect() {
 		$config = $this->config;
 		$this->connected = false;
 
-		$flags = $config['flags'] + array(
+		$flags = array(
 			PDO::ATTR_PERSISTENT => $config['persistent'],
 			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -162,13 +146,7 @@ class Mysql extends DboSource {
 		if (!empty($config['encoding'])) {
 			$flags[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $config['encoding'];
 		}
-		if (!empty($config['ssl_key']) && !empty($config['ssl_cert'])) {
-			$flags[PDO::MYSQL_ATTR_SSL_KEY] = $config['ssl_key'];
-			$flags[PDO::MYSQL_ATTR_SSL_CERT] = $config['ssl_cert'];
-		}
-		if (!empty($config['ssl_ca'])) {
-			$flags[PDO::MYSQL_ATTR_SSL_CA] = $config['ssl_ca'];
-		}
+
 		if (empty($config['unix_socket'])) {
 			$dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['database']}";
 		} else {
@@ -183,11 +161,6 @@ class Mysql extends DboSource {
 				$flags
 			);
 			$this->connected = true;
-			if (!empty($config['settings'])) {
-				foreach ($config['settings'] as $key => $value) {
-					$this->_execute("SET $key=$value");
-				}
-			}
 		} catch (PDOException $e) {
 			throw new MissingConnectionException(array(
 				'class' => get_class($this),
@@ -204,7 +177,7 @@ class Mysql extends DboSource {
 /**
  * Check whether the MySQL extension is installed/loaded
  *
- * @return bool
+ * @return boolean
  */
 	public function enabled() {
 		return in_array('mysql', PDO::getAvailableDrivers());
@@ -213,7 +186,7 @@ class Mysql extends DboSource {
 /**
  * Returns an array of sources (tables) in the database.
  *
- * @param mixed $data List of tables.
+ * @param mixed $data
  * @return array Array of table names in the database
  */
 	public function listSources($data = null) {
@@ -241,7 +214,7 @@ class Mysql extends DboSource {
 /**
  * Builds a map of the columns contained in a result
  *
- * @param PDOStatement $results The results to format.
+ * @param PDOStatement $results
  * @return void
  */
 	public function resultSet($results) {
@@ -347,14 +320,8 @@ class Mysql extends DboSource {
 				'type' => $this->column($column->Type),
 				'null' => ($column->Null === 'YES' ? true : false),
 				'default' => $column->Default,
-				'length' => $this->length($column->Type)
+				'length' => $this->length($column->Type),
 			);
-			if (in_array($fields[$column->Field]['type'], $this->fieldParameters['unsigned']['types'], true)) {
-				$fields[$column->Field]['unsigned'] = $this->_unsigned($column->Type);
-			}
-			if ($fields[$column->Field]['type'] === 'timestamp' && strtoupper($column->Default) === 'CURRENT_TIMESTAMP') {
-				$fields[$column->Field]['default'] = null;
-			}
 			if (!empty($column->Key) && isset($this->index[$column->Key])) {
 				$fields[$column->Field]['key'] = $this->index[$column->Key];
 			}
@@ -378,10 +345,10 @@ class Mysql extends DboSource {
 /**
  * Generates and executes an SQL UPDATE statement for given model, fields, and values.
  *
- * @param Model $model The model to update.
- * @param array $fields The fields to update.
- * @param array $values The values to set.
- * @param mixed $conditions The conditions to use.
+ * @param Model $model
+ * @param array $fields
+ * @param array $values
+ * @param mixed $conditions
  * @return array
  */
 	public function update(Model $model, $fields = array(), $values = null, $conditions = null) {
@@ -402,7 +369,7 @@ class Mysql extends DboSource {
 
 		if (!empty($conditions)) {
 			$alias = $this->name($model->alias);
-			if ($model->name === $model->alias) {
+			if ($model->name == $model->alias) {
 				$joins = implode(' ', $this->_getJoins($model));
 			}
 		}
@@ -422,9 +389,9 @@ class Mysql extends DboSource {
 /**
  * Generates and executes an SQL DELETE statement for given id/conditions on given model.
  *
- * @param Model $model The model to delete from.
- * @param mixed $conditions The conditions to use.
- * @return bool Success
+ * @param Model $model
+ * @param mixed $conditions
+ * @return boolean Success
  */
 	public function delete(Model $model, $conditions = null) {
 		if (!$this->_useAlias) {
@@ -463,7 +430,7 @@ class Mysql extends DboSource {
  * Sets the database encoding
  *
  * @param string $enc Database encoding
- * @return bool
+ * @return boolean
  */
 	public function setEncoding($enc) {
 		return $this->_execute('SET NAMES ' . $enc) !== false;
@@ -494,7 +461,7 @@ class Mysql extends DboSource {
 					if ($idx->Index_type === 'FULLTEXT') {
 						$index[$idx->Key_name]['type'] = strtolower($idx->Index_type);
 					} else {
-						$index[$idx->Key_name]['unique'] = (int)($idx->Non_unique == 0);
+						$index[$idx->Key_name]['unique'] = intval($idx->Non_unique == 0);
 					}
 				} else {
 					if (!empty($index[$idx->Key_name]['column']) && !is_array($index[$idx->Key_name]['column'])) {
@@ -520,7 +487,7 @@ class Mysql extends DboSource {
  * Generate a MySQL Alter Table syntax for the given Schema comparison
  *
  * @param array $compare Result of a CakeSchema::compare()
- * @param string $table The table name.
+ * @param string $table
  * @return array Array of alter statements to make.
  */
 	public function alterSchema($compare, $table = null) {
@@ -531,7 +498,7 @@ class Mysql extends DboSource {
 		$colList = array();
 		foreach ($compare as $curTable => $types) {
 			$indexes = $tableParameters = $colList = array();
-			if (!$table || $table === $curTable) {
+			if (!$table || $table == $curTable) {
 				$out .= 'ALTER TABLE ' . $this->fullTableName($curTable) . " \n";
 				foreach ($types as $type => $column) {
 					if (isset($column['indexes'])) {
@@ -564,11 +531,7 @@ class Mysql extends DboSource {
 								if (!isset($col['name'])) {
 									$col['name'] = $field;
 								}
-								$alter = 'CHANGE ' . $this->name($field) . ' ' . $this->buildColumn($col);
-								if (isset($col['after'])) {
-									$alter .= ' AFTER ' . $this->name($col['after']);
-								}
-								$colList[] = $alter;
+								$colList[] = 'CHANGE ' . $this->name($field) . ' ' . $this->buildColumn($col);
 							}
 							break;
 					}
@@ -694,7 +657,7 @@ class Mysql extends DboSource {
  * @return string Formatted length part of an index field
  */
 	protected function _buildIndexSubPart($lengths, $column) {
-		if ($lengths === null) {
+		if (is_null($lengths)) {
 			return '';
 		}
 		if (!isset($lengths[$column])) {
@@ -704,7 +667,7 @@ class Mysql extends DboSource {
 	}
 
 /**
- * Returns a detailed array of sources (tables) in the database.
+ * Returns an detailed array of sources (tables) in the database.
  *
  * @param string $name Table name to get parameters
  * @return array Array of table names in the database
@@ -780,17 +743,11 @@ class Mysql extends DboSource {
 		if (strpos($col, 'blob') !== false || $col === 'binary') {
 			return 'binary';
 		}
-		if (strpos($col, 'float') !== false || strpos($col, 'double') !== false) {
+		if (strpos($col, 'float') !== false || strpos($col, 'double') !== false || strpos($col, 'decimal') !== false) {
 			return 'float';
-		}
-		if (strpos($col, 'decimal') !== false || strpos($col, 'numeric') !== false) {
-			return 'decimal';
 		}
 		if (strpos($col, 'enum') !== false) {
 			return "enum($vals)";
-		}
-		if (strpos($col, 'set') !== false) {
-			return "set($vals)";
 		}
 		return 'text';
 	}
@@ -807,20 +764,10 @@ class Mysql extends DboSource {
 /**
  * Check if the server support nested transactions
  *
- * @return bool
+ * @return boolean
  */
 	public function nestedTransactionSupported() {
 		return $this->useNestedTransactions && version_compare($this->getVersion(), '4.1', '>=');
-	}
-
-/**
- * Check if column type is unsigned
- *
- * @param string $real Real database-layer column type (i.e. "varchar(255)")
- * @return bool True if column is unsigned, false otherwise
- */
-	protected function _unsigned($real) {
-		return strpos(strtolower($real), 'unsigned') !== false;
 	}
 
 }

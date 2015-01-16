@@ -6,6 +6,8 @@
  *
  * You can configure a FileEngine cache, using Cache::config()
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -42,7 +44,7 @@ class FileEngine extends CacheEngine {
  *
  * - path = absolute path to cache directory, default => CACHE
  * - prefix = string prefix for filename, default => cake_
- * - lock = enable file locking on write, default => true
+ * - lock = enable file locking on write, default => false
  * - serialize = serialize the data, default => true
  *
  * @var array
@@ -53,7 +55,7 @@ class FileEngine extends CacheEngine {
 /**
  * True unless FileEngine::__active(); fails
  *
- * @var bool
+ * @var boolean
  */
 	protected $_init = true;
 
@@ -64,7 +66,7 @@ class FileEngine extends CacheEngine {
  * To reinitialize the settings call Cache::engine('EngineName', [optional] settings = array());
  *
  * @param array $settings array of setting for the engine
- * @return bool True if the engine has been successfully initialized, false if not
+ * @return boolean True if the engine has been successfully initialized, false if not
  */
 	public function init($settings = array()) {
 		$settings += array(
@@ -93,8 +95,8 @@ class FileEngine extends CacheEngine {
 /**
  * Garbage collection. Permanently remove all expired and deleted data
  *
- * @param int $expires [optional] An expires timestamp, invalidating all data before.
- * @return bool True if garbage collection was successful, false on failure
+ * @param integer $expires [optional] An expires timestamp, invalidating all data before.
+ * @return boolean True if garbage collection was successful, false on failure
  */
 	public function gc($expires = null) {
 		return $this->clear(true);
@@ -105,8 +107,8 @@ class FileEngine extends CacheEngine {
  *
  * @param string $key Identifier for the data
  * @param mixed $data Data to be cached
- * @param int $duration How long to cache the data, in seconds
- * @return bool True if the data was successfully cached, false on failure
+ * @param integer $duration How long to cache the data, in seconds
+ * @return boolean True if the data was successfully cached, false on failure
  */
 	public function write($key, $data, $duration) {
 		if ($data === '' || !$this->_init) {
@@ -165,7 +167,7 @@ class FileEngine extends CacheEngine {
 
 		$this->_File->rewind();
 		$time = time();
-		$cachetime = (int)$this->_File->current();
+		$cachetime = intval($this->_File->current());
 
 		if ($cachetime !== false && ($cachetime < $time || ($time + $this->settings['duration']) < $cachetime)) {
 			if ($this->settings['lock']) {
@@ -200,7 +202,7 @@ class FileEngine extends CacheEngine {
  * Delete a key from the cache
  *
  * @param string $key Identifier for the data
- * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
+ * @return boolean True if the value was successfully deleted, false if it didn't exist or couldn't be removed
  */
 	public function delete($key) {
 		if ($this->_setKey($key) === false || !$this->_init) {
@@ -208,104 +210,60 @@ class FileEngine extends CacheEngine {
 		}
 		$path = $this->_File->getRealPath();
 		$this->_File = null;
-
-		//@codingStandardsIgnoreStart
-		return @unlink($path);
-		//@codingStandardsIgnoreEnd
+		return unlink($path);
 	}
 
 /**
  * Delete all values from the cache
  *
- * @param bool $check Optional - only delete expired cache items
- * @return bool True if the cache was successfully cleared, false otherwise
+ * @param boolean $check Optional - only delete expired cache items
+ * @return boolean True if the cache was successfully cleared, false otherwise
  */
 	public function clear($check) {
 		if (!$this->_init) {
 			return false;
 		}
-		$this->_File = null;
-
-		$threshold = $now = false;
+		$dir = dir($this->settings['path']);
 		if ($check) {
 			$now = time();
 			$threshold = $now - $this->settings['duration'];
 		}
-
-		$this->_clearDirectory($this->settings['path'], $now, $threshold);
-
-		$directory = new RecursiveDirectoryIterator($this->settings['path']);
-		$contents = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
-		$cleared = array();
-		foreach ($contents as $path) {
-			if ($path->isFile()) {
-				continue;
-			}
-
-			$path = $path->getRealPath() . DS;
-			if (!in_array($path, $cleared)) {
-				$this->_clearDirectory($path, $now, $threshold);
-				$cleared[] = $path;
-			}
-		}
-		return true;
-	}
-
-/**
- * Used to clear a directory of matching files.
- *
- * @param string $path The path to search.
- * @param int $now The current timestamp
- * @param int $threshold Any file not modified after this value will be deleted.
- * @return void
- */
-	protected function _clearDirectory($path, $now, $threshold) {
 		$prefixLength = strlen($this->settings['prefix']);
-
-		if (!is_dir($path)) {
-			return;
-		}
-
-		$dir = dir($path);
 		while (($entry = $dir->read()) !== false) {
 			if (substr($entry, 0, $prefixLength) !== $this->settings['prefix']) {
 				continue;
 			}
-
-			try {
-				$file = new SplFileObject($path . $entry, 'r');
-			} catch (Exception $e) {
+			if ($this->_setKey($entry) === false) {
 				continue;
 			}
-
-			if ($threshold) {
-				$mtime = $file->getMTime();
+			if ($check) {
+				$mtime = $this->_File->getMTime();
 
 				if ($mtime > $threshold) {
 					continue;
 				}
-				$expires = (int)$file->current();
+
+				$expires = (int)$this->_File->current();
 
 				if ($expires > $now) {
 					continue;
 				}
 			}
-			if ($file->isFile()) {
-				$filePath = $file->getRealPath();
-				$file = null;
-
-				//@codingStandardsIgnoreStart
-				@unlink($filePath);
-				//@codingStandardsIgnoreEnd
+			$path = $this->_File->getRealPath();
+			$this->_File = null;
+			if (file_exists($path)) {
+				unlink($path);
 			}
 		}
+		$dir->close();
+		return true;
 	}
 
 /**
  * Not implemented
  *
- * @param string $key The key to decrement
- * @param int $offset The number to offset
+ * @param string $key
+ * @param integer $offset
  * @return void
  * @throws CacheException
  */
@@ -316,8 +274,8 @@ class FileEngine extends CacheEngine {
 /**
  * Not implemented
  *
- * @param string $key The key to decrement
- * @param int $offset The number to offset
+ * @param string $key
+ * @param integer $offset
  * @return void
  * @throws CacheException
  */
@@ -330,8 +288,8 @@ class FileEngine extends CacheEngine {
  * for the cache file the key is referring to.
  *
  * @param string $key The key
- * @param bool $createKey Whether the key should be created if it doesn't exists, or not
- * @return bool true if the cache key could be set, false otherwise
+ * @param boolean $createKey Whether the key should be created if it doesn't exists, or not
+ * @return boolean true if the cache key could be set, false otherwise
  */
 	protected function _setKey($key, $createKey = false) {
 		$groups = null;
@@ -341,7 +299,7 @@ class FileEngine extends CacheEngine {
 		$dir = $this->settings['path'] . $groups;
 
 		if (!is_dir($dir)) {
-			mkdir($dir, 0775, true);
+			mkdir($dir, 0777, true);
 		}
 		$path = new SplFileInfo($dir . $key);
 
@@ -370,16 +328,10 @@ class FileEngine extends CacheEngine {
 /**
  * Determine is cache directory is writable
  *
- * @return bool
+ * @return boolean
  */
 	protected function _active() {
 		$dir = new SplFileInfo($this->settings['path']);
-		if (Configure::read('debug')) {
-			$path = $dir->getPathname();
-			if (!is_dir($path)) {
-				mkdir($path, 0775, true);
-			}
-		}
 		if ($this->_init && !($dir->isDir() && $dir->isWritable())) {
 			$this->_init = false;
 			trigger_error(__d('cake_dev', '%s is not writable', $this->settings['path']), E_USER_WARNING);
@@ -399,34 +351,26 @@ class FileEngine extends CacheEngine {
 			return false;
 		}
 
-		$key = Inflector::underscore(str_replace(array(DS, '/', '.', '<', '>', '?', ':', '|', '*', '"'), '_', strval($key)));
+		$key = Inflector::underscore(str_replace(array(DS, '/', '.'), '_', strval($key)));
 		return $key;
 	}
 
 /**
  * Recursively deletes all files under any directory named as $group
  *
- * @param string $group The group to clear.
- * @return bool success
+ * @return boolean success
  */
 	public function clearGroup($group) {
-		$this->_File = null;
 		$directoryIterator = new RecursiveDirectoryIterator($this->settings['path']);
 		$contents = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::CHILD_FIRST);
 		foreach ($contents as $object) {
 			$containsGroup = strpos($object->getPathName(), DS . $group . DS) !== false;
-			$hasPrefix = true;
-			if (strlen($this->settings['prefix']) !== 0) {
-				$hasPrefix = strpos($object->getBaseName(), $this->settings['prefix']) === 0;
-			}
+			$hasPrefix = strpos($object->getBaseName(), $this->settings['prefix']) === 0;
 			if ($object->isFile() && $containsGroup && $hasPrefix) {
-				$path = $object->getPathName();
-				$object = null;
-				//@codingStandardsIgnoreStart
-				@unlink($path);
-				//@codingStandardsIgnoreEnd
+				unlink($object->getPathName());
 			}
 		}
+		$this->_File = null;
 		return true;
 	}
 }

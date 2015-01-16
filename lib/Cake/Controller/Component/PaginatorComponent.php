@@ -2,6 +2,8 @@
 /**
  * Paginator Component
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -119,7 +121,7 @@ class PaginatorComponent extends Component {
  * @param Model|string $object Model to paginate (e.g: model instance, or 'Model', or 'Model.InnerModel')
  * @param string|array $scope Additional find conditions to use while paginating
  * @param array $whitelist List of allowed fields for ordering. This allows you to prevent ordering
- *   on non-indexed, or undesirable columns. See PaginatorComponent::validateSort() for additional details
+ *   on non-indexed, or undesirable columns. See PaginatorComponent::validateSort() for additional details 
  *   on how the whitelisting and sort field validation works.
  * @return array Model query results
  * @throws MissingModelException
@@ -179,7 +181,7 @@ class PaginatorComponent extends Component {
 			$extra['type'] = $type;
 		}
 
-		if ((int)$page < 1) {
+		if (intval($page) < 1) {
 			$page = 1;
 		}
 		$page = $options['page'] = (int)$page;
@@ -202,8 +204,6 @@ class PaginatorComponent extends Component {
 			$count = 0;
 		} elseif ($object->hasMethod('paginateCount')) {
 			$count = $object->paginateCount($conditions, $recursive, $extra);
-		} elseif ($page === 1 && count($results) < $limit) {
-			$count = count($results);
 		} else {
 			$parameters = compact('conditions');
 			if ($recursive != $object->recursive) {
@@ -211,9 +211,12 @@ class PaginatorComponent extends Component {
 			}
 			$count = $object->find('count', array_merge($parameters, $extra));
 		}
-		$pageCount = (int)ceil($count / $limit);
+		$pageCount = intval(ceil($count / $limit));
 		$requestedPage = $page;
 		$page = max(min($page, $pageCount), 1);
+		if ($requestedPage > $page) {
+			throw new NotFoundException();
+		}
 
 		$paging = array(
 			'page' => $page,
@@ -236,11 +239,8 @@ class PaginatorComponent extends Component {
 			array($object->alias => $paging)
 		);
 
-		if ($requestedPage > $page) {
-			throw new NotFoundException();
-		}
-
-		if (!in_array('Paginator', $this->Controller->helpers) &&
+		if (
+			!in_array('Paginator', $this->Controller->helpers) &&
 			!array_key_exists('Paginator', $this->Controller->helpers)
 		) {
 			$this->Controller->helpers[] = 'Paginator';
@@ -361,10 +361,6 @@ class PaginatorComponent extends Component {
  * @return array An array of options with sort + direction removed and replaced with order if possible.
  */
 	public function validateSort(Model $object, array $options, array $whitelist = array()) {
-		if (empty($options['order']) && is_array($object->order)) {
-			$options['order'] = $object->order;
-		}
-
 		if (isset($options['sort'])) {
 			$direction = null;
 			if (isset($options['direction'])) {
@@ -393,7 +389,7 @@ class PaginatorComponent extends Component {
 				if (strpos($key, '.') !== false) {
 					list($alias, $field) = explode('.', $key);
 				}
-				$correctAlias = ($object->alias === $alias);
+				$correctAlias = ($object->alias == $alias);
 
 				if ($correctAlias && $object->hasField($field)) {
 					$order[$object->alias . '.' . $field] = $value;
@@ -405,7 +401,9 @@ class PaginatorComponent extends Component {
 			}
 			$options['order'] = $order;
 		}
-
+		if (empty($options['order']) && !empty($object->order)) {
+			$options['order'] = $object->order;
+		}
 		return $options;
 	}
 

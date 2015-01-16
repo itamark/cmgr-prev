@@ -14,7 +14,6 @@
 
 App::uses('View', 'View');
 App::uses('Xml', 'Utility');
-App::uses('Hash', 'Utility');
 
 /**
  * A view class that is used for creating XML responses.
@@ -63,7 +62,7 @@ class XmlView extends View {
 /**
  * Constructor
  *
- * @param Controller $controller Controller instance.
+ * @param Controller $controller
  */
 	public function __construct(Controller $controller = null) {
 		parent::__construct($controller);
@@ -71,18 +70,6 @@ class XmlView extends View {
 		if (isset($controller->response) && $controller->response instanceof CakeResponse) {
 			$controller->response->type('xml');
 		}
-	}
-
-/**
- * Skip loading helpers if this is a _serialize based view.
- *
- * @return void
- */
-	public function loadHelpers() {
-		if (isset($this->viewVars['_serialize'])) {
-			return;
-		}
-		parent::loadHelpers();
 	}
 
 /**
@@ -117,25 +104,16 @@ class XmlView extends View {
 
 		if (is_array($serialize)) {
 			$data = array($rootNode => array());
-			foreach ($serialize as $alias => $key) {
-				if (is_numeric($alias)) {
-					$alias = $key;
-				}
-				$data[$rootNode][$alias] = $this->viewVars[$key];
+			foreach ($serialize as $key) {
+				$data[$rootNode][$key] = $this->viewVars[$key];
 			}
 		} else {
 			$data = isset($this->viewVars[$serialize]) ? $this->viewVars[$serialize] : null;
-			if (is_array($data) && Hash::numeric(array_keys($data))) {
+			if (is_array($data) && Set::numeric(array_keys($data))) {
 				$data = array($rootNode => array($serialize => $data));
 			}
 		}
-
-		$options = array();
-		if (Configure::read('debug')) {
-			$options['pretty'] = true;
-		}
-
-		return Xml::fromArray($data, $options)->asXML();
+		return Xml::fromArray($data)->asXML();
 	}
 
 }

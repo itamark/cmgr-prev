@@ -4,6 +4,8 @@
  *
  * Used by bake to create new Model files.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -69,16 +71,6 @@ if ($displayField): ?>
  * @var string
  */
 	public $displayField = '<?php echo $displayField; ?>';
-
-<?php endif;
-
-if (!empty($actsAs)): ?>
-/**
- * Behaviors
- *
- * @var array
- */
-	public $actsAs = array(<?php echo "\n\t"; foreach ($actsAs as $behavior): echo "\t"; var_export($behavior); echo ",\n\t"; endforeach; ?>);
 
 <?php endif;
 
@@ -177,6 +169,8 @@ if (!empty($associations['hasAndBelongsToMany'])):
 		$out .= "\t\t\t'limit' => '',\n";
 		$out .= "\t\t\t'offset' => '',\n";
 		$out .= "\t\t\t'finderQuery' => '',\n";
+		$out .= "\t\t\t'deleteQuery' => '',\n";
+		$out .= "\t\t\t'insertQuery' => ''\n";
 		$out .= "\t\t)";
 		if ($i + 1 < $habtmCount) {
 			$out .= ",";

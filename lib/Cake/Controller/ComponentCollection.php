@@ -55,16 +55,6 @@ class ComponentCollection extends ObjectCollection implements CakeEventListener 
 	}
 
 /**
- * Set the controller associated with the collection.
- *
- * @param Controller $Controller Controller to set
- * @return void
- */
-	public function setController(Controller $Controller) {
-		$this->_Controller = $Controller;
-	}
-
-/**
  * Get the controller associated with the collection.
  *
  * @return Controller Controller instance
@@ -94,7 +84,7 @@ class ComponentCollection extends ObjectCollection implements CakeEventListener 
  * @throws MissingComponentException when the component could not be found
  */
 	public function load($component, $settings = array()) {
-		if (isset($settings['className'])) {
+		if (is_array($settings) && isset($settings['className'])) {
 			$alias = $component;
 			$component = $settings['className'];
 		}

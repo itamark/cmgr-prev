@@ -1,5 +1,7 @@
 <?php
 /**
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -46,7 +48,7 @@ class ControllerAuthorize extends BaseAuthorize {
 	public function controller(Controller $controller = null) {
 		if ($controller) {
 			if (!method_exists($controller, 'isAuthorized')) {
-				throw new CakeException(__d('cake_dev', '$controller does not implement an %s method.', 'isAuthorized()'));
+				throw new CakeException(__d('cake_dev', '$controller does not implement an isAuthorized() method.'));
 			}
 		}
 		return parent::controller($controller);
@@ -56,8 +58,8 @@ class ControllerAuthorize extends BaseAuthorize {
  * Checks user authorization using a controller callback.
  *
  * @param array $user Active user data
- * @param CakeRequest $request Request instance.
- * @return bool
+ * @param CakeRequest $request
+ * @return boolean
  */
 	public function authorize($user, CakeRequest $request) {
 		return (bool)$this->_Controller->isAuthorized($user);

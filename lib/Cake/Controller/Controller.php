@@ -29,7 +29,7 @@ App::uses('CakeEventManager', 'Event');
  *
  * Controllers should provide a number of 'action' methods. These are public methods on the controller
  * that are not prefixed with a '_' and not part of Controller. Each action serves as an endpoint for
- * performing a specific action on a resource or collection of resources. For example: adding or editing a new
+ * performing a specific action on a resource or collection of resources. For example adding or editing a new
  * object, or listing a set of objects.
  *
  * You can access request parameters, using `$this->request`. The request object contains all the POST, GET and FILES
@@ -79,18 +79,18 @@ class Controller extends Object implements CakeEventListener {
  *
  * The default value is `true`.
  *
- * @var mixed
+ * @var mixed A single name as a string or a list of names as an array.
  * @link http://book.cakephp.org/2.0/en/controllers.html#components-helpers-and-uses
  */
 	public $uses = true;
 
 /**
  * An array containing the names of helpers this controller uses. The array elements should
- * not contain the "Helper" part of the class name.
+ * not contain the "Helper" part of the classname.
  *
- * Example: `public $helpers = array('Html', 'Js', 'Time', 'Ajax');`
+ * Example: `public $helpers = array('Html', 'Javascript', 'Time', 'Ajax');`
  *
- * @var mixed
+ * @var mixed A single name as a string or a list of names as an array.
  * @link http://book.cakephp.org/2.0/en/controllers.html#components-helpers-and-uses
  */
 	public $helpers = array();
@@ -114,7 +114,7 @@ class Controller extends Object implements CakeEventListener {
 	public $response;
 
 /**
- * The class name to use for creating the response object.
+ * The classname to use for creating the response object.
  *
  * @var string
  */
@@ -162,14 +162,14 @@ class Controller extends Object implements CakeEventListener {
  * Set to true to automatically render the view
  * after action logic.
  *
- * @var bool
+ * @var boolean
  */
 	public $autoRender = true;
 
 /**
  * Set to true to automatically render the layout around views.
  *
- * @var bool
+ * @var boolean
  */
 	public $autoLayout = true;
 
@@ -182,7 +182,7 @@ class Controller extends Object implements CakeEventListener {
 
 /**
  * Array containing the names of components this controller uses. Component names
- * should not contain the "Component" portion of the class name.
+ * should not contain the "Component" portion of the classname.
  *
  * Example: `public $components = array('Session', 'RequestHandler', 'Acl');`
  *
@@ -207,7 +207,7 @@ class Controller extends Object implements CakeEventListener {
 	public $View;
 
 /**
- * File extension for view templates. Defaults to CakePHP's conventional ".ctp".
+ * File extension for view templates. Defaults to Cake's conventional ".ctp".
  *
  * @var string
  */
@@ -259,7 +259,7 @@ class Controller extends Object implements CakeEventListener {
 
 /**
  * Holds current methods of the controller. This is a list of all the methods reachable
- * via URL. Modifying this array will allow you to change which methods can be reached.
+ * via URL. Modifying this array, will allow you to change which methods can be reached.
  *
  * @var array
  */
@@ -285,9 +285,9 @@ class Controller extends Object implements CakeEventListener {
 	public $modelKey = null;
 
 /**
- * Holds any validation errors produced by the last call of the validateErrors() method.
+ * Holds any validation errors produced by the last call of the validateErrors() method/
  *
- * @var array
+ * @var array Validation errors, or false if none
  */
 	public $validationErrors = null;
 
@@ -346,8 +346,8 @@ class Controller extends Object implements CakeEventListener {
  * Provides backwards compatibility to avoid problems with empty and isset to alias properties.
  * Lazy loads models using the loadModel() method if declared in $uses
  *
- * @param string $name Property name to check.
- * @return bool
+ * @param string $name
+ * @return void
  */
 	public function __isset($name) {
 		switch ($name) {
@@ -384,8 +384,8 @@ class Controller extends Object implements CakeEventListener {
  * Provides backwards compatibility access to the request object properties.
  * Also provides the params alias.
  *
- * @param string $name The name of the requested value
- * @return mixed The requested value for valid variables/aliases else null
+ * @param string $name
+ * @return void
  */
 	public function __get($name) {
 		switch ($name) {
@@ -412,8 +412,8 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Provides backwards compatibility access for setting values to the request object.
  *
- * @param string $name Property name to set.
- * @param mixed $value Value to set.
+ * @param string $name
+ * @param mixed $value
  * @return void
  */
 	public function __set($name, $value) {
@@ -422,19 +422,15 @@ class Controller extends Object implements CakeEventListener {
 			case 'here':
 			case 'webroot':
 			case 'data':
-				$this->request->{$name} = $value;
-				return;
+				return $this->request->{$name} = $value;
 			case 'action':
-				$this->request->params['action'] = $value;
-				return;
+				return $this->request->params['action'] = $value;
 			case 'params':
-				$this->request->params = $value;
-				return;
+				return $this->request->params = $value;
 			case 'paginate':
-				$this->Components->load('Paginator')->settings = $value;
-				return;
+				return $this->Components->load('Paginator')->settings = $value;
 		}
-		$this->{$name} = $value;
+		return $this->{$name} = $value;
 	}
 
 /**
@@ -448,7 +444,7 @@ class Controller extends Object implements CakeEventListener {
  * - $this->autoRender - To false if $request->params['return'] == 1
  * - $this->passedArgs - The the combined results of params['named'] and params['pass]
  *
- * @param CakeRequest $request Request instance.
+ * @param CakeRequest $request
  * @return void
  */
 	public function setRequest(CakeRequest $request) {
@@ -471,7 +467,7 @@ class Controller extends Object implements CakeEventListener {
  * Dispatches the controller action. Checks that the action
  * exists and isn't private.
  *
- * @param CakeRequest $request Request instance.
+ * @param CakeRequest $request
  * @return mixed The resulting response.
  * @throws PrivateActionException When actions are not public or prefixed by _
  * @throws MissingActionException When actions are not defined and scaffolding is
@@ -506,7 +502,7 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param ReflectionMethod $method The method to be invoked.
  * @param CakeRequest $request The request to check.
- * @return bool
+ * @return boolean
  */
 	protected function _isPrivateAction(ReflectionMethod $method, CakeRequest $request) {
 		$privateAction = (
@@ -528,7 +524,7 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Returns a scaffold object to use for dynamically scaffolded controllers.
  *
- * @param CakeRequest $request Request instance.
+ * @param CakeRequest $request
  * @return Scaffold
  */
 	protected function _getScaffold(CakeRequest $request) {
@@ -610,8 +606,8 @@ class Controller extends Object implements CakeEventListener {
 	}
 
 /**
- * Returns a list of all events that will fire in the controller during its lifecycle.
- * You can override this function to add your own listener callbacks
+ * Returns a list of all events that will fire in the controller during it's lifecycle.
+ * You can override this function to add you own listener callbacks
  *
  * @return array
  */
@@ -669,8 +665,6 @@ class Controller extends Object implements CakeEventListener {
  * - triggers Component `startup` methods.
  *
  * @return void
- * @triggers Controller.initialize $this
- * @triggers Controller.startup $this
  */
 	public function startupProcess() {
 		$this->getEventManager()->dispatch(new CakeEvent('Controller.initialize', $this));
@@ -685,7 +679,6 @@ class Controller extends Object implements CakeEventListener {
  * - calls the Controller's `afterFilter` method.
  *
  * @return void
- * @triggers Controller.shutdown $this
  */
 	public function shutdownProcess() {
 		$this->getEventManager()->dispatch(new CakeEvent('Controller.shutdown', $this));
@@ -694,7 +687,7 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Queries & sets valid HTTP response codes & messages.
  *
- * @param int|array $code If $code is an integer, then the corresponding code/message is
+ * @param integer|array $code If $code is an integer, then the corresponding code/message is
  *        returned if it exists, null if it does not exist. If $code is an array,
  *        then the 'code' and 'message' keys of each nested array are added to the default
  *        HTTP codes. Example:
@@ -708,7 +701,7 @@ class Controller extends Object implements CakeEventListener {
  *
  * @return array Associative array of the HTTP codes as keys, and the message
  *    strings as values, or null of the given $code does not exist.
- * @deprecated 3.0.0 Since 2.4. Will be removed in 3.0. Use CakeResponse::httpCodes().
+ * @deprecated Use CakeResponse::httpCodes();
  */
 	public function httpCodes($code = null) {
 		return $this->response->httpCodes($code);
@@ -716,12 +709,12 @@ class Controller extends Object implements CakeEventListener {
 
 /**
  * Loads and instantiates models required by this controller.
- * If the model is non existent, it will throw a missing database table error, as CakePHP generates
+ * If the model is non existent, it will throw a missing database table error, as Cake generates
  * dynamic models for the time being.
  *
  * @param string $modelClass Name of model class to load
- * @param int|string $id Initial ID the instanced model class should have
- * @return bool True if the model was found
+ * @param integer|string $id Initial ID the instanced model class should have
+ * @return mixed true when single model found and instance created, error returned if model not found.
  * @throws MissingModelException if the model class cannot be found.
  */
 	public function loadModel($modelClass = null, $id = null) {
@@ -751,10 +744,9 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param string|array $url A string or array-based URL pointing to another location within the app,
  *     or an absolute URL
- * @param int $status Optional HTTP status code (eg: 404)
- * @param bool $exit If true, exit() will be called after the redirect
+ * @param integer $status Optional HTTP status code (eg: 404)
+ * @param boolean $exit If true, exit() will be called after the redirect
  * @return void
- * @triggers Controller.beforeRedirect $this, array($url, $status, $exit)
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::redirect
  */
 	public function redirect($url, $status = null, $exit = true) {
@@ -800,8 +792,8 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param mixed $response Response from beforeRedirect callback
  * @param string|array $url The same value of beforeRedirect
- * @param int $status The same value of beforeRedirect
- * @param bool $exit The same value of beforeRedirect
+ * @param integer $status The same value of beforeRedirect
+ * @param boolean $exit The same value of beforeRedirect
  * @return array Array with keys url, status and exit
  */
 	protected function _parseBeforeRedirect($response, $url, $status, $exit) {
@@ -824,7 +816,7 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param string $status The header message that is being set.
  * @return void
- * @deprecated 3.0.0 Will be removed in 3.0. Use CakeResponse::header().
+ * @deprecated Use CakeResponse::header()
  */
 	public function header($status) {
 		$this->response->header($status);
@@ -877,8 +869,7 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Returns number of errors in a submitted FORM.
  *
- * @return int Number of errors
- * @deprecated 3.0.0 This method will be removed in 3.0
+ * @return integer Number of errors
  */
 	public function validate() {
 		$args = func_get_args();
@@ -891,13 +882,12 @@ class Controller extends Object implements CakeEventListener {
 	}
 
 /**
- * Validates models passed by parameters. Takes a list of models as a variable argument.
- * Example:
+ * Validates models passed by parameters. Example:
  *
  * `$errors = $this->validateErrors($this->Article, $this->User);`
  *
+ * @param mixed A list of models as a variable argument
  * @return array Validation errors, or false if none
- * @deprecated 3.0.0 This method will be removed in 3.0
  */
 	public function validateErrors() {
 		$objects = func_get_args();
@@ -924,7 +914,6 @@ class Controller extends Object implements CakeEventListener {
  * @param string $view View to use for rendering
  * @param string $layout Layout to use
  * @return CakeResponse A response object containing the rendered view.
- * @triggers Controller.beforeRender $this
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::render
  */
 	public function render($view = null, $layout = null) {
@@ -947,7 +936,7 @@ class Controller extends Object implements CakeEventListener {
 		$models = ClassRegistry::keys();
 		foreach ($models as $currentModel) {
 			$currentObject = ClassRegistry::getObject($currentModel);
-			if ($currentObject instanceof Model) {
+			if (is_a($currentObject, 'Model')) {
 				$className = get_class($currentObject);
 				list($plugin) = pluginSplit(App::location($className));
 				$this->request->params['models'][$currentObject->alias] = compact('plugin', 'className');
@@ -964,7 +953,7 @@ class Controller extends Object implements CakeEventListener {
  * Returns the referring URL for this request.
  *
  * @param string $default Default URL to use if HTTP_REFERER cannot be read from headers
- * @param bool $local If true, restrict referring URLs to local server
+ * @param boolean $local If true, restrict referring URLs to local server
  * @return string Referring URL
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::referer
  */
@@ -975,7 +964,7 @@ class Controller extends Object implements CakeEventListener {
 
 		$referer = $this->request->referer($local);
 		if ($referer === '/' && $default) {
-			return Router::url($default, !$local);
+			return Router::url($default, true);
 		}
 		return $referer;
 	}
@@ -985,7 +974,7 @@ class Controller extends Object implements CakeEventListener {
  *
  * @return void
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::disableCache
- * @deprecated 3.0.0 Will be removed in 3.0. Use CakeResponse::disableCache().
+ * @deprecated Use CakeResponse::disableCache()
  */
 	public function disableCache() {
 		$this->response->disableCache();
@@ -998,18 +987,17 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param string $message Message to display to the user
  * @param string|array $url Relative string or array-based URL to redirect to after the time expires
- * @param int $pause Time to show the message
+ * @param integer $pause Time to show the message
  * @param string $layout Layout you want to use, defaults to 'flash'
  * @return void
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::flash
- * @deprecated 3.0.0 Will be removed in 3.0. Use Session::setFlash().
  */
 	public function flash($message, $url, $pause = 1, $layout = 'flash') {
 		$this->autoRender = false;
 		$this->set('url', Router::url($url));
 		$this->set('message', $message);
 		$this->set('pause', $pause);
-		$this->set('pageTitle', $message);
+		$this->set('page_title', $message);
 		$this->render(false, $layout);
 	}
 
@@ -1020,10 +1008,10 @@ class Controller extends Object implements CakeEventListener {
  * @param string|array $op A string containing an SQL comparison operator, or an array matching operators
  *        to fields
  * @param string $bool SQL boolean operator: AND, OR, XOR, etc.
- * @param bool $exclusive If true, and $op is an array, fields not included in $op will not be
+ * @param boolean $exclusive If true, and $op is an array, fields not included in $op will not be
  *        included in the returned conditions
- * @return array|null An array of model conditions
- * @deprecated 3.0.0 Will be removed in 3.0.
+ * @return array An array of model conditions
+ * @deprecated Will be removed in 3.0
  */
 	public function postConditions($data = array(), $op = null, $bool = 'AND', $exclusive = false) {
 		if (!is_array($data) || empty($data)) {
@@ -1080,6 +1068,7 @@ class Controller extends Object implements CakeEventListener {
  * @param array $whitelist List of allowed options for paging
  * @return array Model query results
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::paginate
+ * @deprecated Use PaginatorComponent instead
  */
 	public function paginate($object = null, $scope = array(), $whitelist = array()) {
 		return $this->Components->load('Paginator', $this->paginate)->paginate($object, $scope, $whitelist);
@@ -1111,16 +1100,16 @@ class Controller extends Object implements CakeEventListener {
  *
  * If this method returns false the controller will not continue on to redirect the request.
  * The $url, $status and $exit variables have same meaning as for the controller's method. You can also
- * return a string which will be interpreted as the URL to redirect to or return associative array with
+ * return a string which will be interpreted as the url to redirect to or return associative array with
  * key 'url' and optionally 'status' and 'exit'.
  *
  * @param string|array $url A string or array-based URL pointing to another location within the app,
  *     or an absolute URL
- * @param int $status Optional HTTP status code (eg: 404)
- * @param bool $exit If true, exit() will be called after the redirect
+ * @param integer $status Optional HTTP status code (eg: 404)
+ * @param boolean $exit If true, exit() will be called after the redirect
  * @return mixed
  *   false to stop redirection event,
- *   string controllers a new redirection URL or
+ *   string controllers a new redirection url or
  *   array with the keys url, status and exit to be used by the redirect method.
  * @link http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks
  */
@@ -1140,7 +1129,7 @@ class Controller extends Object implements CakeEventListener {
  * This method should be overridden in child classes.
  *
  * @param string $method name of method called example index, edit, etc.
- * @return bool Success
+ * @return boolean Success
  * @link http://book.cakephp.org/2.0/en/controllers.html#callbacks
  */
 	public function beforeScaffold($method) {
@@ -1150,10 +1139,10 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Alias to beforeScaffold()
  *
- * @param string $method Method name.
- * @return bool
+ * @param string $method
+ * @return boolean
  * @see Controller::beforeScaffold()
- * @deprecated 3.0.0 Will be removed in 3.0.
+ * @deprecated
  */
 	protected function _beforeScaffold($method) {
 		return $this->beforeScaffold($method);
@@ -1163,7 +1152,7 @@ class Controller extends Object implements CakeEventListener {
  * This method should be overridden in child classes.
  *
  * @param string $method name of method called either edit or update.
- * @return bool Success
+ * @return boolean Success
  * @link http://book.cakephp.org/2.0/en/controllers.html#callbacks
  */
 	public function afterScaffoldSave($method) {
@@ -1173,10 +1162,10 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Alias to afterScaffoldSave()
  *
- * @param string $method Method name.
- * @return bool
+ * @param string $method
+ * @return boolean
  * @see Controller::afterScaffoldSave()
- * @deprecated 3.0.0 Will be removed in 3.0.
+ * @deprecated
  */
 	protected function _afterScaffoldSave($method) {
 		return $this->afterScaffoldSave($method);
@@ -1186,7 +1175,7 @@ class Controller extends Object implements CakeEventListener {
  * This method should be overridden in child classes.
  *
  * @param string $method name of method called either edit or update.
- * @return bool Success
+ * @return boolean Success
  * @link http://book.cakephp.org/2.0/en/controllers.html#callbacks
  */
 	public function afterScaffoldSaveError($method) {
@@ -1196,10 +1185,10 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Alias to afterScaffoldSaveError()
  *
- * @param string $method Method name.
- * @return bool
+ * @param string $method
+ * @return boolean
  * @see Controller::afterScaffoldSaveError()
- * @deprecated 3.0.0 Will be removed in 3.0.
+ * @deprecated
  */
 	protected function _afterScaffoldSaveError($method) {
 		return $this->afterScaffoldSaveError($method);
@@ -1211,7 +1200,7 @@ class Controller extends Object implements CakeEventListener {
  * Method MUST return true in child classes
  *
  * @param string $method name of method called example index, edit, etc.
- * @return bool Success
+ * @return boolean Success
  * @link http://book.cakephp.org/2.0/en/controllers.html#callbacks
  */
 	public function scaffoldError($method) {
@@ -1221,10 +1210,10 @@ class Controller extends Object implements CakeEventListener {
 /**
  * Alias to scaffoldError()
  *
- * @param string $method Method name.
- * @return bool
+ * @param string $method
+ * @return boolean
  * @see Controller::scaffoldError()
- * @deprecated 3.0.0 Will be removed in 3.0.
+ * @deprecated
  */
 	protected function _scaffoldError($method) {
 		return $this->scaffoldError($method);
