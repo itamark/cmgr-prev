@@ -99,6 +99,8 @@ Configure::write('Dispatcher.filters', array(
 	'CacheDispatcher'
 ));
 
+App::uses('AuthComponent', 'Controller/Component');
+
 /**
  * Configures default file logging options
  */
