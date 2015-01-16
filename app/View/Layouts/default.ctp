@@ -45,11 +45,7 @@ $cakeDescription = __d('cake_dev', 'CMGR');
         <ul id="nav-mobile" class="right side-nav">
           <li><a href="sass.html">Sass</a></li>
           <li><a href="components.html">Components</a></li>
-          <?php if(AuthComponent::user('id')): ?>
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="mdi-social-person small left"></i>User<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
-    <?php else: ?>
-     <li><a href="/sign-up">Sign Up</a></li>
- <?php endif; ?>
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
         </ul>
 
         <!-- Include this line below -->
@@ -57,8 +53,9 @@ $cakeDescription = __d('cake_dev', 'CMGR');
         	<!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
   <li><a href="#!">View Profile</a></li>
+  <li><a href="#!">two</a></li>
  <!--  <li class="divider"></li> -->
-  <li><a href="/logout">Logout</a></li>
+  <li><a href="#!">Logout</a></li>
 </ul>
         <!-- End -->
 
@@ -91,8 +88,6 @@ $(".button-collapse").sideNav();
 $(".dropdown-button").dropdown({hover: false});
 });
 	      </script>
-	      	     
-
 
 </body>
 </html>
