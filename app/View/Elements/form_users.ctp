@@ -1,5 +1,3 @@
-<div class="col card l6 offset-l3">
-            <div class="card-content">
 <h2 class="form-signin-heading"> <?php echo $label ?></h2>
 <?php echo $this->Form->create('User');?>
 	<?php echo $this->Form->input('username',array(
@@ -20,5 +18,3 @@
 		'selected' => !empty( $user['role'] ) ? $user['role'] : ''));?>
 
 <?php echo $this->Form->end(__("Submit"));?>
-</div>
-</div>

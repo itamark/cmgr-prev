@@ -39,12 +39,12 @@ $cakeDescription = __d('cake_dev', 'CMGR');
 </head>
 <body>
 
-	 <nav class="teal">
+	 <nav>
       <div class="nav-wrapper container">
         <a href="/" class="brand-logo">CMGR</a>
         <ul id="nav-mobile" class="right side-nav">
-          <!-- <li><a href="sass.html">Sass</a></li>
-          <li><a href="components.html">Components</a></li> -->
+          <li><a href="sass.html">Sass</a></li>
+          <li><a href="components.html">Components</a></li>
           <?php if(AuthComponent::user('id')): ?>
         <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="mdi-social-person small left"></i>User<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
     <?php else: ?>
@@ -56,7 +56,7 @@ $cakeDescription = __d('cake_dev', 'CMGR');
         <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
         	<!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
-  <li><a href="/me">View Profile</a></li>
+  <li><a href="#!">View Profile</a></li>
  <!--  <li class="divider"></li> -->
   <li><a href="/logout">Logout</a></li>
 </ul>
@@ -65,9 +65,9 @@ $cakeDescription = __d('cake_dev', 'CMGR');
       </div>
     </nav>
 	<div id="container" class="container">
-		<!-- <div id="header">
+		<div id="header">
 			<h1><?php echo $this->Html->link($cakeDescription, '/'); ?></h1>
-		</div> -->
+		</div>
 		<div id="content">
 
 			<?php echo $this->Session->flash(); ?>
@@ -91,8 +91,6 @@ $(".button-collapse").sideNav();
 $(".dropdown-button").dropdown({hover: false});
 });
 	      </script>
-	      		      <script type="text/javascript" src="/js/scripts.js"></script>
-
 	      	     
 
 

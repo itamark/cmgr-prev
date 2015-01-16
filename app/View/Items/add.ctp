@@ -1,9 +1,6 @@
-<div class="row">
-
-
-<div class="items form card col l6 offset-l3">
-	<div class="card-content">
+<div class="items form">
 <?php echo $this->Form->create('Item'); ?>
+	<fieldset>
 		<legend><?php echo __('Add Item'); ?></legend>
 	<?php
 		echo $this->Form->input('url');
@@ -12,10 +9,10 @@
 		echo $this->Form->input('description');
 		echo $this->Form->input('topic_id');
 	?>
+	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-</div>
-<!-- <div class="actions">
+<div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
@@ -27,6 +24,4 @@
 		<li><?php echo $this->Html->link(__('List Comments'), array('controller' => 'comments', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Comment'), array('controller' => 'comments', 'action' => 'add')); ?> </li>
 	</ul>
-</div> -->
 </div>
-
