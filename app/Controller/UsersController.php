@@ -1,5 +1,11 @@
 <?php
+
+App::uses('AppController', 'Controller');
+
+
+
 class UsersController extends AppController {
+
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('add', 'logout', 'change_password', 'remember_password', 'remember_password_step_2');

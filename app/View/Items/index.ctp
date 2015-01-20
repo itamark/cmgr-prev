@@ -8,7 +8,7 @@
  -->		
 				<?php
 		
-		echo $this->Form->input('user_id', array('options' => $users, 'default' => $authUser['id'], 'type' => 'hidden'));
+		echo $this->Form->input('user_id', array('options' => $users, 'default' => AuthComponent::user('id'), 'type' => 'hidden'));
 		echo $this->Form->input('title', array('type' => 'hidden'));
 		
 		echo $this->Form->input('description', array('label' => 'Ask and share...'));

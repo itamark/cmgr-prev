@@ -238,7 +238,6 @@ Component.Forms = function($) {
                     type: config.form.attr('method'),
                     url: config.form.attr('action'),
                     data: config.form.serialize(),
-                    dataType: "JSON",
                     success: function(response, textStatus, jqXHR) {
                         console.log('success');
                         switch (config.form.attr('id')) {
@@ -249,7 +248,6 @@ Component.Forms = function($) {
                                 loginForm();
                                 break;
                         }
-                        loginForm();
                     },
                     error: function(jqXHR, data, errorThrown) {
                         console.log(jqXHR);
@@ -263,7 +261,7 @@ Component.Forms = function($) {
     };
 
     var loginForm = function(){
-        // window.location = '/';
+         window.location = '/';
     }
     var postItem = function(response){
         console.log(response);

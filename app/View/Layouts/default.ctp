@@ -28,7 +28,7 @@ $cakeDescription = __d('cake_dev', 'CMGR');
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('cake.cmgr');
+		echo $this->Html->css('main');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
