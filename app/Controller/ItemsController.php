@@ -13,7 +13,13 @@ class ItemsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	// public $components = array('Paginator');
+	public $paginate = array(
+        'limit' => 25,
+        'order' => array(
+            'Item.created' => 'desc'
+        )
+    );
 /**
  * index method
  *
@@ -21,7 +27,8 @@ class ItemsController extends AppController {
  */
 	public function index() {
 		$this->Item->recursive = 1;
-		$this->set('items', $this->Paginator->paginate());
+		// $this->set('items', $this->Paginator->paginate());
+		$this->set('items', $this->paginate());
 		$users = $this->User->find('list');
 		 $topics = $this->Item->Topic->find('list');
 		$this->set(compact('users', 'topics'));
