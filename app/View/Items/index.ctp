@@ -18,10 +18,36 @@
 			
 	
 <?php echo $this->Form->end(__('Post')); ?>
+
 <?php foreach ($items as $item): ?>
+
 <div class="card">
             <div class="card-content">
-              <span class="card-title grey-text"><?php echo h($item['Item']['description']); ?></span>
+
+<div class="row">
+<div class="col l2">
+		<img class="media-object round" src="https://secure.gravatar.com/avatar/<?php echo md5(h($item['User']['email'])); ?>?s=50&d=mm">
+
+  <!-- Dropdown Structure -->
+  <?php if($item['User']['id'] === AuthComponent::user('id')){ ?>
+  	 <!-- Dropdown Trigger -->
+  <a class='dropdown-button btn btn-small' href='#' data-activates='dropdown1'><i class="mdi-navigation-more-vert"></i></a>
+  <ul id='dropdown1' class='dropdown-content'>
+    <li><a href="/items/delete/<?php echo h($item['Item']['id']); ?>">Delete</a></li>
+    <li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $item['Item']['id']), array(), __('Are you sure you want to delete # %s?', $item['Item']['id'])); ?>
+</li>
+    <li><a href="#!">two</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">three</a></li>
+  </ul>
+  <?php } ?>
+
+</div>
+			<div class="col l10">
+
+  </div></div>
+        
+             		 <span class=""><?php echo h($item['Item']['description']); ?></span>
 
 </div>
 		</div>

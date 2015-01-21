@@ -106,16 +106,20 @@ header('Content-type: application/json');
  * @return void
  */
 	public function delete($id = null) {
+
 		$this->Item->id = $id;
 		if (!$this->Item->exists()) {
 			throw new NotFoundException(__('Invalid item'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		
+		$this->request->onlyAllow('post', 'delete');
+
 		if ($this->Item->delete()) {
 			$this->Session->setFlash(__('The item has been deleted.'));
 		} else {
 			$this->Session->setFlash(__('The item could not be deleted. Please, try again.'));
 		}
+		
 		return $this->redirect(array('action' => 'index'));
 	}
 }
