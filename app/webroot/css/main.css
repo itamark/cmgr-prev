@@ -1,6 +1,9 @@
 #content {
   margin-top: 20px;
 }
+#content .media-object.round {
+  border-radius: 50%;
+}
 .table {
   margin-bottom: 0px;
 }

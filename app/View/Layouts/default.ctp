@@ -89,6 +89,7 @@ $cakeDescription = __d('cake_dev', 'CMGR');
 $('select').material_select();
 $(".button-collapse").sideNav();
 $(".dropdown-button").dropdown({hover: false});
+
 });
 	      </script>
 	      		      <script type="text/javascript" src="/js/scripts.js"></script>
