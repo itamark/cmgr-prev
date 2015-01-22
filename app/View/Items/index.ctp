@@ -15,7 +15,9 @@
 		echo $this->Form->input('url', array('type' => 'hidden'));
 		echo $this->Form->input('topic_id', array('options' => $topics));
 	?>
-			
+<!-- 	<pre>
+	<?php print_r($items); ?>
+</pre>	 -->			
 	
 <?php echo $this->Form->end(__('Post')); ?>
 
@@ -27,34 +29,48 @@
 <div class="row">
 <div class="col l2">
 		<img class="media-object round" src="https://secure.gravatar.com/avatar/<?php echo md5(h($item['User']['email'])); ?>?s=50&d=mm">
+</div>
+<div class="col l8">
+             		 <span class=""><?php echo h($item['Item']['description']); ?></span>
 
+
+
+</div>
+<div class="col l2">
   <!-- Dropdown Structure -->
   <?php if($item['User']['id'] === AuthComponent::user('id')){ ?>
   	 <!-- Dropdown Trigger -->
-  <a class='dropdown-button btn btn-small' href='#' data-activates='dropdown1'><i class="mdi-navigation-more-vert"></i></a>
+  <a class='dropdown-button btn btn-small grey white-text' href='#' data-activates='dropdown1'><i class="mdi-navigation-more-vert"></i></a>
   <ul id='dropdown1' class='dropdown-content'>
-    <li><a href="/items/delete/<?php echo h($item['Item']['id']); ?>">Delete</a></li>
     <li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $item['Item']['id']), array(), __('Are you sure you want to delete # %s?', $item['Item']['id'])); ?>
 </li>
-    <li><a href="#!">two</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">three</a></li>
+
   </ul>
   <?php } ?>
-
 </div>
-			<div class="col l10">
 
-  </div></div>
+  </div>
+
+<div class="row">
+<?php $item['Comment'] ?>
+</div>
+<div class="row">
+<?php echo $this->Form->create('Comment'); ?>
+	<?php
+		echo $this->Form->input('user_id', array( 'default' => AuthComponent::user('id'), 'type' => 'hidden'));
+		echo $this->Form->input('comment_txt', array('label' => 'Comment'));
+		echo $this->Form->input('item_id', array( 'default' => $item['Item']['id'], 'type' => 'hidden'));
+	?>
+<?php echo $this->Form->end(__('Submit')); ?>
+</div>
         
-             		 <span class=""><?php echo h($item['Item']['description']); ?></span>
 
 </div>
 		</div>
 <?php endforeach; ?>
 </div>
 		</div>
-	<table cellpadding="0" cellspacing="0">
+<!-- 	<table cellpadding="0" cellspacing="0">
 	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
@@ -91,8 +107,8 @@
 	</tr>
 <?php endforeach; ?>
 	</tbody>
-	</table>
-	<p>
+	</table> -->
+<!-- 	<p>
 	<?php
 	echo $this->Paginator->counter(array(
 	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
@@ -117,4 +133,4 @@
 		<li><?php echo $this->Html->link(__('List Comments'), array('controller' => 'comments', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Comment'), array('controller' => 'comments', 'action' => 'add')); ?> </li>
 	</ul>
-</div>
+</div> -->
