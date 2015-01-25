@@ -21,7 +21,7 @@ class CommentsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Comment->recursive = 0;
+		$this->Comment->recursive = 3;
 		$this->set('comments', $this->Paginator->paginate());
 	}
 
@@ -46,11 +46,13 @@ class CommentsController extends AppController {
  * @return void
  */
 	public function add() {
+
 		if ($this->request->is('post')) {
 			$this->Comment->create();
 			if ($this->Comment->save($this->request->data)) {
-				$this->Session->setFlash(__('The comment has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$options = array('conditions' => array('Comment.item_id = ' . $this->request->data['Comment']['item_id']));
+				header('Content-type: application/json');
+				die(json_encode($this->Comment->find('all', $options)));
 			} else {
 				$this->Session->setFlash(__('The comment could not be saved. Please, try again.'));
 			}
@@ -58,6 +60,13 @@ class CommentsController extends AppController {
 		$users = $this->Comment->User->find('list');
 		$items = $this->Comment->Item->find('list');
 		$this->set(compact('users', 'items'));
+	}
+
+	public function newcomments($item_id = null){
+		$this->Comment->recursive = 3;
+		$options = array('conditions' => array('Comment.item_id = '.$item_id));
+		$this->set('comments', $this->Comment->find('all', $options));
+$this->layout = 'ajax'; 
 	}
 
 /**

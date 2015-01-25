@@ -31,6 +31,7 @@ class ItemsController extends AppController {
 		$this->set('items', $this->paginate());
 		$users = $this->User->find('list');
 		 $topics = $this->Item->Topic->find('list');
+		 $comments = $this->Item->Comment->find('list');
 		$this->set(compact('users', 'topics'));
 
 	}

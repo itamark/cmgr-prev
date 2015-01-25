@@ -76,6 +76,7 @@ class DATABASE_CONFIG {
 		'password' => 'root',
 		'database' => 'cmgr_site',
 		'prefix' => '',
+		'unix_socket' => '/Applications/MAMP/tmp/mysql/mysql.sock',
 		//'encoding' => 'utf8',
 	);
 
