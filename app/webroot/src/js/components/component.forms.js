@@ -10,42 +10,53 @@ Component.Forms = function($) {
         config.page = page;
         config = App.Utils.extend(options, config);
         config.form = config.page.find('form');
-        config.form.submit(function(e){
 
+
+        config.form.each(function () {
+    var $this = $(this);
+    var $parent = $this.parent();
+     $this.submit(function(e){
             e.preventDefault();
             $.ajax({
-                    type: config.form.attr('method'),
-                    url: config.form.attr('action'),
-                    data: config.form.serialize(),
+                    type: $this.attr('method'),
+                    url: $this.attr('action'),
+                    data: $this.serialize(),
                     success: function(response, textStatus, jqXHR) {
                         console.log('success');
-                        switch (config.form.attr('id')) {
+                        switch ($this.attr('id')) {
                             case 'ItemIndexForm':
                                 postItem(response);
                                 break;
                             case 'UserLoginForm':
                                 loginForm();
                                 break;
+                            case 'CommentAddForm':
+                                postComment(response);
+                                break;
                         }
                     },
                     error: function(jqXHR, data, errorThrown) {
                         console.log(jqXHR);
-
                     }
-
                 });
         });
-
+});
+        
 
     };
 
     var loginForm = function(){
          window.location = '/';
     }
+
     var postItem = function(response){
-        console.log(response);
-        config.form.after('<div class="card"><div class="card-content"><span class="card-title grey-text">'+response.Item.description+'</span></div></div>');
-        
+ $('textarea').val('');
+        $('.itemscontainer').load('/comments/newitems/'+response[0].Comment.item_id);
+   }
+
+    var postComment = function(response){
+        $('textarea').val('');
+        $('#collectionitem'+response[0].Comment.item_id).load('/comments/newcomments/'+response[0].Comment.item_id);  
     }
 
 

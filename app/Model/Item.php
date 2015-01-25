@@ -6,46 +6,17 @@ App::uses('AppModel', 'Model');
  * @property User $User
  * @property Topic $Topic
  * @property Comment $Comment
+ * @property Tag $Tag
  */
 class Item extends AppModel {
 
 /**
- * Validation rules
+ * Display field
  *
- * @var array
+ * @var string
  */
-	public $validate = array(
-		'url' => array(
-			// 'notEmpty' => array(
-			// 	'rule' => array('notEmpty'),
-			// 	//'message' => 'Your custom message here',
-			// 	//'allowEmpty' => false,
-			// 	//'required' => false,
-			// 	//'last' => false, // Stop validation after this rule
-			// 	//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			// ),
-		),
-		'user_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'topic_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $displayField = 'title';
+
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -89,6 +60,30 @@ class Item extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		)
+	);
+
+
+/**
+ * hasAndBelongsToMany associations
+ *
+ * @var array
+ */
+	public $hasAndBelongsToMany = array(
+		'Tag' => array(
+			'className' => 'Tag',
+			'joinTable' => 'items_tags',
+			'foreignKey' => 'item_id',
+			'associationForeignKey' => 'tag_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
 		)
 	);
 

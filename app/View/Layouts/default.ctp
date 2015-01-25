@@ -39,7 +39,7 @@ $cakeDescription = __d('cake_dev', 'CMGR');
 </head>
 <body>
 
-	 <nav class="teal">
+	 <nav class="teal fixed">
       <div class="nav-wrapper container">
         <a href="/" class="brand-logo">CMGR</a>
         <ul id="nav-mobile" class="right side-nav">

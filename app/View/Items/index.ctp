@@ -1,8 +1,6 @@
 <div class="items index">
-<!-- 	<h2><?php echo __('Posts'); ?></h2>
- --><!-- 	<?php print_r($authUser); ?>
- -->	<div class="row">
-			<div class="col l8">
+	<div class="row">
+			<div class="col l8 itemscontainer">
 <?php echo $this->Form->create(null, array('url'=>'/items/add')); ?>
 <!-- 		<legend><?php echo __('Add Item'); ?></legend>
  -->		
@@ -15,9 +13,7 @@
 		echo $this->Form->input('url', array('type' => 'hidden'));
 		echo $this->Form->input('topic_id', array('options' => $topics));
 	?>
-<!-- 	<pre>
-	<?php print_r($items); ?>
-</pre>	 -->			
+			
 	
 <?php echo $this->Form->end(__('Post')); ?>
 
@@ -31,7 +27,7 @@
 		<img class="media-object round" src="https://secure.gravatar.com/avatar/<?php echo md5(h($item['User']['email'])); ?>?s=50&d=mm">
 </div>
 <div class="col l8">
-             		 <span class=""><?php echo h($item['Item']['description']); ?></span>
+             		 <h5 class=""><?php echo h($item['Item']['description']); ?></span>
 
 
 
@@ -52,16 +48,31 @@
   </div>
 
 <div class="row">
-<?php $item['Comment'] ?>
+<div class="col l12">
+ <ul class="collection" id="<?php echo 'collectionitem'.$item['Item']['id']; ?>">
+    
+    
+
+<?php foreach ($item['Comment'] as $comment): ?>
+	  <li class="collection-item">
+<img class="media-object round" src="https://secure.gravatar.com/avatar/<?php echo md5(h($item['User']['email'])); ?>?s=20&d=mm">
+<?php echo $comment['comment_txt']; ?>
+</li>
+<?php endforeach; ?>
+</ul>
+</div>
 </div>
 <div class="row">
-<?php echo $this->Form->create('Comment'); ?>
+<div class="col l12">
+	<?php echo $this->Form->create('Comment', array('action' => 'add')); ?>
 	<?php
 		echo $this->Form->input('user_id', array( 'default' => AuthComponent::user('id'), 'type' => 'hidden'));
 		echo $this->Form->input('comment_txt', array('label' => 'Comment'));
 		echo $this->Form->input('item_id', array( 'default' => $item['Item']['id'], 'type' => 'hidden'));
 	?>
 <?php echo $this->Form->end(__('Submit')); ?>
+</div>
+
 </div>
         
 
